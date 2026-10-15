@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline AI Function Caller - Zero External APIs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="logo-badge">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">NeuralFn</span>
+        </div>
+        <span class="badge-status">
+          <span class="pulse-dot"></span> 100% Offline AI Engine
+        </span>
+      </div>
+      <div class="header-right">
+        <a href="#master-data" class="nav-btn">Master Data (<span id="fn-count">6</span>)</a>
+        <a href="#api-docs" class="nav-btn">HTTP API</a>
+        <button id="add-fn-trigger" class="btn btn-primary">+ Add Master Function</button>
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="main-layout">
+      <!-- Left Column: Prompt Input & Results -->
+      <section class="prompt-section">
+        <div class="card glass-card">
+          <div class="card-header">
+            <h2>Natural Language Prompt</h2>
+            <span class="sub-label">Zero external API • TF-IDF + Cosine & Slot Extraction</span>
+          </div>
+
+          <div class="input-wrapper">
+            <div class="input-icon">💬</div>
+            <input 
+              type="text" 
+              id="prompt-input" 
+              placeholder="e.g. what is the payslip of hareesh in october" 
+              value="what is the payslip of hareesh in october"
+              autocomplete="off"
+            />
+            <button id="submit-prompt-btn" class="btn btn-gradient">
+              <span>Execute</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <!-- Quick Example Chips -->
+          <div class="example-chips-wrapper">
+            <span class="chips-label">Try Examples:</span>
+            <div class="chips-list">
+              <button class="chip" data-prompt="what is the payslip of hareesh in october">payslip hareesh october</button>
+              <button class="chip" data-prompt="what is the payslip of hareesh in ocober">payslip hareesh ocober (typo test)</button>
+              <button class="chip" data-prompt="check attendance of hareesh on 2026-10-15">attendance of hareesh on 2026-10-15</button>
+              <button class="chip" data-prompt="apply 3 days sick leave for hareesh">apply 3 days sick leave for hareesh</button>
+              <button class="chip" data-prompt="calculate tax for hareesh in 2025">calculate tax for hareesh in 2025</button>
+              <button class="chip" data-prompt="send email to hareesh@example.com">send email to hareesh@example.com</button>
+              <button class="chip" data-prompt="what is the weather in london">weather in london</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result Display Card -->
+        <div id="result-card" class="card result-card glass-card">
+          <div class="result-header">
+            <div class="result-title">
+              <span class="status-indicator"></span>
+              <h3>Generated Function Call</h3>
+            </div>
+            <div class="result-actions">
+              <span id="confidence-badge" class="confidence-badge">Confidence: 100%</span>
+              <button id="copy-call-btn" class="btn btn-sm btn-outline" title="Copy function call">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Copy</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Highlighted Call Banner -->
+          <div class="code-banner">
+            <code id="function-call-text">payslip(hareesh, october)</code>
+          </div>
+
+          <!-- Breakdown Details -->
+          <div class="breakdown-grid">
+            <div class="breakdown-item">
+              <div class="item-label">Matched Function</div>
+              <div id="matched-fn-name" class="item-value font-mono">payslip</div>
+            </div>
+            <div class="breakdown-item">
+              <div class="item-label">Description</div>
+              <div id="matched-fn-desc" class="item-value">Retrieve salary payslip or pay slip details for an employee</div>
+            </div>
+          </div>
+
+          <!-- Extracted Parameters Table -->
+          <div class="params-section">
+            <div class="section-title">Extracted Slot Parameters</div>
+            <div id="params-container" class="params-badges">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Simulated Execution Output -->
+          <div class="execution-section">
+            <div class="exec-header">
+              <span>Simulated Execution Output</span>
+              <span class="exec-badge">Real-time Handler</span>
+            </div>
+            <pre id="execution-output" class="exec-code">Loading output...</pre>
+          </div>
+        </div>
+
+        <!-- HTTP Query Endpoint Direct Link Box -->
+        <div class="card glass-card" id="api-docs">
+          <div class="card-header">
+            <h2>Direct HTTP Query API</h2>
+            <span class="sub-label">Call via browser URL or cURL using <code>?promt=...</code> or <code>?prompt=...</code></span>
+          </div>
+          <div class="api-demo-box">
+            <div class="api-row">
+              <span class="api-method">GET</span>
+              <code class="api-url" id="live-api-url">http://localhost:3000/?promt=what is the payslip of hareesh in october</code>
+              <a id="open-api-btn" href="#" target="_blank" class="btn btn-sm btn-outline">Test in Tab ↗</a>
+            </div>
+            <div class="curl-snippet">
+              <div class="snippet-header">
+                <span>cURL (Plain Text Output):</span>
+              </div>
+              <pre><code id="curl-code">curl "http://localhost:3000/?promt=what%20is%20the%20payslip%20of%20hareesh%20in%20october&format=text"
+# Returns: payslip(hareesh, october)</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Master Data Explorer -->
+      <section class="master-data-section" id="master-data">
+        <div class="card glass-card">
+          <div class="card-header master-header">
+            <div>
+              <h2>Master Data Registry</h2>
+              <span class="sub-label">The AI engine selects functions defined here</span>
+            </div>
+            <button id="add-fn-btn-2" class="btn btn-sm btn-primary">+ Add Function</button>
+          </div>
+
+          <div id="functions-list" class="functions-list">
+            <!-- Dynamically populated with master data cards -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal for Adding New Function -->
+    <div id="modal-backdrop" class="modal-backdrop hidden">
+      <div class="modal card glass-card">
+        <div class="modal-header">
+          <h3>Register New Master Data Function</h3>
+          <button id="close-modal-btn" class="close-btn">&times;</button>
+        </div>
+        <form id="add-function-form">
+          <div class="form-group">
+            <label for="new-fn-name">Function Name (identifier)</label>
+            <input type="text" id="new-fn-name" placeholder="e.g. generate_invoice" required />
+            <small>Used for the output syntax: name(arg1, arg2)</small>
+          </div>
+
+          <div class="form-group">
+            <label for="new-fn-desc">Description (AI semantic matching)</label>
+            <textarea id="new-fn-desc" rows="2" placeholder="e.g. Generate and download tax invoice for customer order" required></textarea>
+            <small>The AI uses TF-IDF vector similarity on this text</small>
+          </div>
+
+          <div class="form-group">
+            <label for="new-fn-keywords">Keywords / Triggers (comma-separated)</label>
+            <input type="text" id="new-fn-keywords" placeholder="invoice, billing, receipt, bill" />
+          </div>
+
+          <div class="form-group">
+            <label>Parameters (in order of function call)</label>
+            <div id="param-rows-container">
+              <div class="param-row">
+                <input type="text" placeholder="Param name (e.g. customer)" class="param-name" required />
+                <select class="param-type">
+                  <option value="string">String</option>
+                  <option value="number">Number</option>
+                  <option value="month">Month</option>
+                  <option value="date">Date</option>
+                  <option value="email">Email</option>
+                  <option value="year">Year</option>
+                </select>
+                <input type="text" placeholder="Prepositions (e.g. for, of)" class="param-prep" />
+              </div>
+            </div>
+            <button type="button" id="add-param-row-btn" class="btn btn-sm btn-outline">+ Add Parameter</button>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" id="cancel-modal-btn" class="btn btn-outline">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save to Master Data</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

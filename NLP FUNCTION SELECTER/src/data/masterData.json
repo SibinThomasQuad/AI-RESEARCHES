@@ -1,0 +1,815 @@
+[
+  {
+    "name": "greet",
+    "description": "Respond to user greetings, hello, hi, good morning, or pleasantries",
+    "keywords": [
+      "hello",
+      "hi",
+      "hey",
+      "greetings",
+      "good morning",
+      "good afternoon",
+      "good evening",
+      "howdy",
+      "sup"
+    ],
+    "examples": [
+      "hello",
+      "hi there",
+      "hey bot",
+      "good morning",
+      "good evening",
+      "hello chatbot",
+      "hey how are you"
+    ],
+    "parameters": []
+  },
+  {
+    "name": "get_help",
+    "description": "Provide assistance, list available chatbot capabilities, commands, or guidance on what tasks can be performed",
+    "keywords": [
+      "help",
+      "capabilities",
+      "what can you do",
+      "commands",
+      "features",
+      "how to use",
+      "assistance",
+      "guide"
+    ],
+    "examples": [
+      "help me",
+      "what can you do",
+      "show capabilities",
+      "list all commands",
+      "how to use this chatbot",
+      "what tasks can you perform",
+      "give me help"
+    ],
+    "parameters": []
+  },
+  {
+    "name": "payslip",
+    "description": "Retrieve salary payslip or pay slip details for an employee for a specific month or year",
+    "keywords": [
+      "payslip",
+      "pay slip",
+      "salary slip",
+      "salary",
+      "pay",
+      "ctc",
+      "earnings",
+      "remuneration"
+    ],
+    "examples": [
+      "what is the payslip of hareesh in october",
+      "what is the payslip of hareesh in ocober",
+      "get payslip for hareesh in october",
+      "show hareesh payslip for november",
+      "download salary slip of john in march",
+      "hareesh payslip october",
+      "my payslip for september",
+      "can you show my salary slip for august",
+      "generate payslip of sarah in december",
+      "salary of alex in july"
+    ],
+    "parameters": [
+      {
+        "name": "employee",
+        "description": "Name of the employee or self (me)",
+        "type": "string",
+        "prepositions": [
+          "of",
+          "for",
+          "employee"
+        ]
+      },
+      {
+        "name": "month",
+        "description": "Target month for the payslip (handles full, short, and typos)",
+        "type": "month",
+        "prepositions": [
+          "in",
+          "for",
+          "of",
+          "month"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "get_attendance",
+    "description": "Check employee attendance records, punch-in or punch-out times, or presence for a given date",
+    "keywords": [
+      "attendance",
+      "present",
+      "absent",
+      "punch",
+      "timesheet",
+      "clock in",
+      "swipe",
+      "clock out",
+      "worked hours"
+    ],
+    "examples": [
+      "check attendance of hareesh on 2026-10-15",
+      "is hareesh present today",
+      "attendance record for john yesterday",
+      "show punch time of alex on 2026-10-14",
+      "did hareesh clock in today",
+      "check my attendance for today",
+      "swipe in time for sarah on 2026-10-10",
+      "was rahul absent yesterday"
+    ],
+    "parameters": [
+      {
+        "name": "employee",
+        "description": "Name of the employee or self (me)",
+        "type": "string",
+        "prepositions": [
+          "of",
+          "for",
+          "employee"
+        ]
+      },
+      {
+        "name": "date",
+        "description": "Date or relative day (today, yesterday, tomorrow, YYYY-MM-DD)",
+        "type": "date",
+        "prepositions": [
+          "on",
+          "for",
+          "date"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "apply_leave",
+    "description": "Submit a leave application for sick leave, casual leave, vacation, or time off for an employee",
+    "keywords": [
+      "apply leave",
+      "request leave",
+      "sick leave",
+      "casual leave",
+      "vacation",
+      "time off",
+      "pto",
+      "holiday request"
+    ],
+    "examples": [
+      "apply 3 days sick leave for hareesh",
+      "request vacation leave for 5 days for john",
+      "apply casual leave for rahul for 2 days",
+      "apply 1 day sick leave for me",
+      "request 4 days vacation for sarah",
+      "submit leave application for alex for 2 days",
+      "take 3 days off for hareesh"
+    ],
+    "parameters": [
+      {
+        "name": "employee",
+        "description": "Employee requesting leave or self (me)",
+        "type": "string",
+        "prepositions": [
+          "for",
+          "of"
+        ]
+      },
+      {
+        "name": "days",
+        "description": "Number of days requested",
+        "type": "number",
+        "prepositions": [
+          "for"
+        ]
+      },
+      {
+        "name": "leave_type",
+        "description": "Type of leave (sick, casual, vacation, annual, unpaid)",
+        "type": "leave_type"
+      }
+    ]
+  },
+  {
+    "name": "get_leave_balance",
+    "description": "Check remaining leaves, paid time off balance, sick leave quota, or casual leave remaining for an employee",
+    "keywords": [
+      "leave balance",
+      "remaining leaves",
+      "leaves left",
+      "pto balance",
+      "quota",
+      "sick leaves left"
+    ],
+    "examples": [
+      "how many leaves left for hareesh",
+      "check leave balance of rahul",
+      "what is my leave balance",
+      "how many sick leaves left for sarah",
+      "remaining vacation balance for alex",
+      "check casual leave quota for hareesh"
+    ],
+    "parameters": [
+      {
+        "name": "employee",
+        "description": "Employee name or self (me)",
+        "type": "string",
+        "prepositions": [
+          "for",
+          "of"
+        ]
+      },
+      {
+        "name": "leave_type",
+        "description": "Specific leave category (sick, casual, vacation)",
+        "type": "leave_type"
+      }
+    ]
+  },
+  {
+    "name": "calculate_tax",
+    "description": "Calculate income tax or TDS deduction estimate for an employee for a financial year",
+    "keywords": [
+      "tax",
+      "calculate tax",
+      "tds",
+      "income tax",
+      "tax deduction",
+      "form 16",
+      "tax liability"
+    ],
+    "examples": [
+      "calculate tax for hareesh in 2025",
+      "what is the income tax of hareesh for 2026",
+      "tds calculation for rahul in 2024",
+      "estimate my tax in 2025",
+      "calculate tax deduction for alex in 2026"
+    ],
+    "parameters": [
+      {
+        "name": "employee",
+        "description": "Employee name or self (me)",
+        "type": "string",
+        "prepositions": [
+          "for",
+          "of"
+        ]
+      },
+      {
+        "name": "year",
+        "description": "Tax assessment year (e.g. 2025, 2026)",
+        "type": "year",
+        "prepositions": [
+          "in",
+          "for",
+          "year"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "reimburse_expense",
+    "description": "Submit an expense reimbursement claim for travel, food, internet, or office expenses",
+    "keywords": [
+      "reimburse",
+      "reimbursement",
+      "claim expense",
+      "submit bill",
+      "expense claim",
+      "allowance claim"
+    ],
+    "examples": [
+      "claim 500 dollars travel reimbursement for hareesh",
+      "submit expense of 150 for food for alex",
+      "claim 50 dollars internet reimbursement for me",
+      "reimburse 75 for travel for sarah",
+      "submit travel claim of 200 for rahul"
+    ],
+    "parameters": [
+      {
+        "name": "employee",
+        "description": "Employee claiming expense or self (me)",
+        "type": "string",
+        "prepositions": [
+          "for",
+          "of"
+        ]
+      },
+      {
+        "name": "amount",
+        "description": "Monetary expense amount claimed",
+        "type": "amount"
+      },
+      {
+        "name": "category",
+        "description": "Expense category (travel, food, internet, cab)",
+        "type": "string",
+        "pattern": "\\b(travel|food|internet|cab|medical|hardware)\\b"
+      }
+    ]
+  },
+  {
+    "name": "book_meeting_room",
+    "description": "Reserve or book a conference room, meeting room, or boardroom for a specific time and date",
+    "keywords": [
+      "book room",
+      "reserve room",
+      "conference room",
+      "boardroom",
+      "meeting space",
+      "meeting room"
+    ],
+    "examples": [
+      "book conference room A at 2pm on 2026-10-16",
+      "reserve boardroom at 11am today",
+      "book meeting room 2 at 3pm",
+      "reserve conference room B on 2026-10-17 at 10am",
+      "book meeting room A at 4pm"
+    ],
+    "parameters": [
+      {
+        "name": "room",
+        "description": "Name or number of the meeting room",
+        "type": "string",
+        "pattern": "\\b(?:room|boardroom)\\s+([a-zA-Z0-9_-]+)\\b"
+      },
+      {
+        "name": "time",
+        "description": "Booking time slot (e.g. 2pm, 10:30am)",
+        "type": "time"
+      },
+      {
+        "name": "date",
+        "description": "Booking date (e.g. today, tomorrow, YYYY-MM-DD)",
+        "type": "date"
+      }
+    ]
+  },
+  {
+    "name": "schedule_meeting",
+    "description": "Schedule a calendar meeting or call with a colleague or team member",
+    "keywords": [
+      "schedule meeting",
+      "set up call",
+      "book meeting",
+      "calendar invite",
+      "schedule call",
+      "catchup"
+    ],
+    "examples": [
+      "schedule meeting with hareesh at 3pm",
+      "set up call with sarah at 11am",
+      "book catchup with alex at 4pm",
+      "schedule meeting with rahul at 2pm",
+      "schedule a call with hareesh"
+    ],
+    "parameters": [
+      {
+        "name": "person",
+        "description": "Person or colleague to meet with",
+        "type": "string",
+        "prepositions": [
+          "with",
+          "for"
+        ]
+      },
+      {
+        "name": "time",
+        "description": "Meeting start time (e.g. 3pm, 11am)",
+        "type": "time"
+      }
+    ]
+  },
+  {
+    "name": "getemployeeinfo",
+    "description": "Retrieve employee directory information, including full name, employee ID, designation, job title, role, department, team, manager, reporting hierarchy, email, phone number, office location, employment details, and complete employee profile.",
+    "keywords": [
+      "employee info",
+      "employee information",
+      "employee details",
+      "employee profile",
+      "staff details",
+      "personnel information",
+      "who is",
+      "who's",
+      "tell me about",
+      "show me",
+      "find employee",
+      "look up employee",
+      "search employee",
+      "contact details",
+      "contact information",
+      "designation",
+      "job title",
+      "job role",
+      "position",
+      "department",
+      "team",
+      "manager",
+      "reporting manager",
+      "reports to",
+      "email",
+      "email address",
+      "phone",
+      "phone number",
+      "mobile",
+      "extension",
+      "office location",
+      "work location",
+      "employee ID",
+      "staff ID",
+      "profile",
+      "organization",
+      "reporting hierarchy",
+      "direct reports",
+      "colleagues",
+      "coworkers"
+    ],
+    "examples": [
+      "Who is Hareesh?",
+      "Who is Hareesh's manager?",
+      "Who does Hareesh report to?",
+      "Who is the manager of Hareesh?",
+      "Who manages Hareesh?",
+      "Who is Hareesh reporting to?",
+      "What is Hareesh's email?",
+      "What is the email address of Hareesh?",
+      "How can I contact Hareesh?",
+      "Give me Hareesh's phone number",
+      "What is Hareesh's mobile number?",
+      "Which department does Rahul work in?",
+      "What department is Rahul from?",
+      "Which team does Rahul belong to?",
+      "What is Sarah's designation?",
+      "What is Sarah's job title?",
+      "What role does Sarah have?",
+      "What position does Sarah hold?",
+      "Show Alex's profile",
+      "Show me the profile of Alex",
+      "Tell me about Alex",
+      "Get employee details for Alex",
+      "Find Alex in the employee directory",
+      "Look up Alex's contact details",
+      "Give me all information about Alex",
+      "Show Alex's complete employee profile",
+      "What is Alex's employee ID?",
+      "Where does Alex work?",
+      "Which office does Alex work from?",
+      "Where is Alex located?",
+      "Who reports to Alex?",
+      "Which employees report to Alex?",
+      "Who are Alex's direct reports?",
+      "Who is Alex's team lead?",
+      "Who is the head of Alex's department?",
+      "Who is the manager of Rahul in the IT department?",
+      "What is Rahul's email and phone number?",
+      "Tell me Alex's designation and department",
+      "Show the manager and department of Sarah",
+      "Find the contact details for employees named Alex",
+      "Do we have an employee named Hareesh?",
+      "Can you find Rahul's details?",
+      "I need Sarah's work contact",
+      "Please fetch Alex's employee information",
+      "Could you tell me who manages Rahul?",
+      "I want to know which team Sarah belongs to"
+    ],
+    "parameters": [
+      {
+        "name": "employee",
+        "description": "Target employee's name, full name, partial name, nickname, or a list of employee names mentioned in the request.",
+        "type": "string",
+        "required": true,
+        "entity": "employeename",
+        "prepositions": [
+          "of",
+          "for",
+          "about",
+          "on",
+          "by",
+          "named",
+          "called",
+          "belonging to"
+        ],
+        "examples": [
+          "Hareesh",
+          "Rahul",
+          "Alex Johnson",
+          "Sarah",
+          "the employee named Alex"
+        ]
+      },
+      {
+        "name": "field",
+        "description": "Requested employee attribute or attributes. Extract every requested attribute when multiple fields are mentioned.",
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "fullname",
+            "employeeid",
+            "designation",
+            "jobtitle",
+            "role",
+            "department",
+            "team",
+            "manager",
+            "reportingmanager",
+            "manageremail",
+            "email",
+            "phone",
+            "mobile",
+            "extension",
+            "officelocation",
+            "worklocation",
+            "employmentstatus",
+            "joiningdate",
+            "directreports",
+            "reportinghierarchy",
+            "completeprofile"
+          ]
+        },
+        "required": false,
+        "default": [
+          "completeprofile"
+        ]
+      },
+      {
+        "name": "querytype",
+        "description": "Classifies the employee information request.",
+        "type": "string",
+        "enum": [
+          "identity",
+          "singlefield",
+          "multiplefields",
+          "completeprofile",
+          "managerlookup",
+          "directreportslookup",
+          "contactlookup",
+          "departmentlookup",
+          "designationlookup",
+          "locationlookup",
+          "employeesearch",
+          "employeecomparison",
+          "reportinghierarchy"
+        ]
+      },
+      {
+        "name": "filters",
+        "description": "Additional search constraints, such as department, team, location, or designation.",
+        "type": "object",
+        "properties": {
+          "department": {
+            "type": "string"
+          },
+          "team": {
+            "type": "string"
+          },
+          "designation": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "manager": {
+            "type": "string"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "it_support_ticket",
+    "description": "Create an IT support ticket or report technical issues with laptop, wifi, VPN, hardware, or password reset",
+    "keywords": [
+      "it support",
+      "ticket",
+      "wifi not working",
+      "vpn issue",
+      "laptop problem",
+      "reset password",
+      "hardware issue"
+    ],
+    "examples": [
+      "create IT ticket for hareesh laptop wifi not working",
+      "reset my password",
+      "vpn is not connecting for alex",
+      "create ticket for broken screen for sarah",
+      "my mouse is not working",
+      "request new laptop for john"
+    ],
+    "parameters": [
+      {
+        "name": "employee",
+        "description": "Employee reporting issue or self (me)",
+        "type": "string",
+        "prepositions": [
+          "for",
+          "of"
+        ]
+      },
+      {
+        "name": "issue",
+        "description": "Summary of the technical issue",
+        "type": "string",
+        "pattern": "\\b(wifi|vpn|password|laptop|mouse|keyboard|screen|software|monitor)\\b"
+      }
+    ]
+  },
+  {
+    "name": "performance_review",
+    "description": "View employee annual appraisal rating, KPI score, or performance review feedback",
+    "keywords": [
+      "performance review",
+      "rating",
+      "appraisal",
+      "kpi",
+      "evaluation",
+      "score",
+      "feedback"
+    ],
+    "examples": [
+      "what was hareesh performance rating in 2025",
+      "check appraisal feedback for sarah in 2024",
+      "kpi score of alex for 2025",
+      "show my performance review for 2024",
+      "what is annual rating for rahul in 2025"
+    ],
+    "parameters": [
+      {
+        "name": "employee",
+        "description": "Employee name or self (me)",
+        "type": "string",
+        "prepositions": [
+          "for",
+          "of"
+        ]
+      },
+      {
+        "name": "year",
+        "description": "Performance assessment year",
+        "type": "year",
+        "prepositions": [
+          "in",
+          "for",
+          "year"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "get_holiday_list",
+    "description": "Retrieve list of company public holidays, festival dates, and official days off for a month or year",
+    "keywords": [
+      "holiday list",
+      "holidays",
+      "public holiday",
+      "festival list",
+      "days off",
+      "long weekend"
+    ],
+    "examples": [
+      "what are the upcoming holidays in october",
+      "show holiday list for 2026",
+      "is next friday a company holiday",
+      "list public holidays in november",
+      "what holidays do we have this year",
+      "show company holidays in december"
+    ],
+    "parameters": [
+      {
+        "name": "month",
+        "description": "Specific month for holidays",
+        "type": "month",
+        "prepositions": [
+          "in",
+          "for",
+          "of",
+          "month"
+        ]
+      },
+      {
+        "name": "year",
+        "description": "Calendar year",
+        "type": "year",
+        "prepositions": [
+          "in",
+          "for",
+          "year"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "get_company_policy",
+    "description": "Explain company policies regarding work from home (WFH), notice period, health insurance, dress code, or maternity leave",
+    "keywords": [
+      "company policy",
+      "policy",
+      "wfh policy",
+      "work from home",
+      "notice period",
+      "insurance policy",
+      "guidelines"
+    ],
+    "examples": [
+      "what is the work from home policy",
+      "how many days notice period",
+      "health insurance coverage policy",
+      "maternity leave policy details",
+      "explain dress code policy",
+      "what is the wfh policy"
+    ],
+    "parameters": [
+      {
+        "name": "policy_name",
+        "description": "Name of the company policy",
+        "type": "string",
+        "pattern": "\\b(work from home|wfh|notice period|insurance|maternity|dress code|leave policy)\\b"
+      }
+    ]
+  },
+  {
+    "name": "send_email",
+    "description": "Send an email message or notification to a recipient email address",
+    "keywords": [
+      "send email",
+      "email to",
+      "send mail",
+      "mail to",
+      "message to"
+    ],
+    "examples": [
+      "send email to hareesh@example.com",
+      "mail to alex@company.org",
+      "send an email to team@startup.io"
+    ],
+    "parameters": [
+      {
+        "name": "recipient",
+        "description": "Recipient email address",
+        "type": "email",
+        "prepositions": [
+          "to"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "get_weather",
+    "description": "Check current weather condition, climate, or temperature for a specified city",
+    "keywords": [
+      "weather",
+      "temperature",
+      "forecast",
+      "climate"
+    ],
+    "examples": [
+      "what is the weather in london",
+      "show temperature of tokyo",
+      "current climate in paris"
+    ],
+    "parameters": [
+      {
+        "name": "city",
+        "description": "Target city name",
+        "type": "string",
+        "prepositions": [
+          "in",
+          "of",
+          "for",
+          "city"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "get_project_status",
+    "description": "Check development sprint status, deadlines, or progress on an ongoing project",
+    "keywords": [
+      "project status",
+      "sprint status",
+      "progress",
+      "project deadline",
+      "milestone"
+    ],
+    "examples": [
+      "what is the status of project titan",
+      "check sprint progress of mobile app",
+      "status of redesign project",
+      "what is deadline for project titan"
+    ],
+    "parameters": [
+      {
+        "name": "project_name",
+        "description": "Name of the project",
+        "type": "string",
+        "prepositions": [
+          "of",
+          "for",
+          "project"
+        ]
+      }
+    ]
+  }
+]

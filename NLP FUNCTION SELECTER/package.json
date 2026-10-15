@@ -1,0 +1,25 @@
+{
+  "name": "ai-function-caller",
+  "version": "1.0.0",
+  "description": "Local AI/NLP Function Calling Engine in Node.js without external APIs",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "cli": "node src/cli.js",
+    "test": "node tests/test.js"
+  },
+  "keywords": [
+    "nlp",
+    "offline-ai",
+    "function-calling",
+    "slot-filling",
+    "intent-recognition",
+    "node"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.3.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
