@@ -17,6 +17,10 @@ const swaggerSpec = {
       description: "Match natural language prompts to registered functions and extract arguments"
     },
     {
+      name: "Response Humanizer",
+      description: "Convert structured JSON payloads into fluent, human-readable text without external AI"
+    },
+    {
       name: "Master Data",
       description: "Manage registered functions, descriptions, and parameter definitions"
     }
@@ -226,6 +230,146 @@ const swaggerSpec = {
                       }
                     }
                   ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/humanize": {
+      post: {
+        tags: ["Response Humanizer"],
+        summary: "Convert Structured JSON to Human-Readable Text",
+        description: "Takes any structured JSON payload (e.g., from an API call, database, or function execution) and converts it into fluent, natural language sentences without external AI/LLMs.",
+        parameters: [
+          {
+            name: "format",
+            in: "query",
+            description: "Response format: 'json' (default) returns object with humanText field; 'text' returns plain text string.",
+            schema: {
+              type: "string",
+              enum: ["json", "text"],
+              default: "json"
+            }
+          },
+          {
+            name: "context",
+            in: "query",
+            description: "Optional context hint (e.g. 'getemployeeinfo', 'payslip', 'attendance')",
+            required: false,
+            schema: {
+              type: "string"
+            }
+          }
+        ],
+        requestBody: {
+          required: true,
+          description: "Any structured JSON object (employee profile, payslip, attendance, or arbitrary JSON)",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object"
+              },
+              examples: {
+                "Employee Profile": {
+                  summary: "Full Employee Profile",
+                  value: {
+                    "employeeId": "EMP1024",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "fullName": "John Doe",
+                    "email": "john.doe@example.com",
+                    "phone": "+1-555-0102",
+                    "dateOfBirth": "1995-06-15",
+                    "gender": "Male",
+                    "address": {
+                      "street": "123 Main Street",
+                      "city": "New York",
+                      "state": "New York",
+                      "country": "USA",
+                      "postalCode": "10001"
+                    },
+                    "employment": {
+                      "jobTitle": "Software Engineer",
+                      "department": "Engineering",
+                      "employmentType": "Full-Time",
+                      "joiningDate": "2022-03-14",
+                      "managerId": "EMP1001",
+                      "workLocation": "New York Office",
+                      "status": "Active"
+                    },
+                    "salary": {
+                      "currency": "USD",
+                      "annualSalary": 85000,
+                      "payFrequency": "Monthly"
+                    },
+                    "skills": ["JavaScript", "React", "Node.js", "SQL", "Git"],
+                    "education": [
+                      {
+                        "degree": "Bachelor of Science",
+                        "fieldOfStudy": "Computer Science",
+                        "institution": "Example University",
+                        "graduationYear": 2017
+                      }
+                    ],
+                    "emergencyContact": {
+                      "name": "Jane Doe",
+                      "relationship": "Spouse",
+                      "phone": "+1-555-0103"
+                    }
+                  }
+                },
+                "Payslip": {
+                  summary: "Monthly Payslip Breakdown",
+                  value: {
+                    "status": "success",
+                    "employee": "Hareesh",
+                    "month": "october",
+                    "salaryBreakdown": {
+                      "basicSalary": "$49,162",
+                      "hra": "$19,664",
+                      "pfDeduction": "$5,899",
+                      "netSalary": "$62,927"
+                    }
+                  }
+                },
+                "Attendance": {
+                  summary: "Daily Attendance Record",
+                  value: {
+                    "employee": "Hareesh",
+                    "date": "2026-10-15",
+                    "isPresent": true,
+                    "punchIn": "09:05 AM",
+                    "punchOut": "06:15 PM",
+                    "workingHours": "9h 10m"
+                  }
+                }
+              }
+            }
+          }
+        },
+        responses: {
+          "200": {
+            description: "Successfully converted to natural language text",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    success: { type: "boolean", example: true },
+                    humanText: {
+                      type: "string",
+                      example: "Here is the payslip for Hareesh for October. The basic salary is $49,162 with an HRA of $19,664 and PF deductions of $5,899 resulting in a net take-home salary of $62,927."
+                    },
+                    data: { type: "object" }
+                  }
+                }
+              },
+              "text/plain": {
+                schema: {
+                  type: "string",
+                  example: "Here is the payslip for Hareesh for October. The basic salary is $49,162 with an HRA of $19,664 and PF deductions of $5,899 resulting in a net take-home salary of $62,927."
                 }
               }
             }

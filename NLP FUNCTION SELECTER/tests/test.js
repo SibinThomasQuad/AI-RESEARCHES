@@ -50,3 +50,45 @@ console.log(`\n=== SUMMARY: ${passed}/${testCases.length} Passed ===\n`);
 if (passed !== testCases.length) {
   process.exit(1);
 }
+
+// NLG / JSON Humanizer Tests
+const { JsonHumanizer } = require("../src/nlp/nlg");
+console.log("=== RUNNING JSON HUMANIZER (NLG) TESTS ===");
+
+const nlgTests = [
+  {
+    name: "Payslip Humanization",
+    data: { employee: "Hareesh", month: "october", salaryBreakdown: { basicSalary: "$49,162", hra: "$19,664", pfDeduction: "$5,899", netSalary: "$62,927" } },
+    expectedContains: "payslip for Hareesh for October"
+  },
+  {
+    name: "Attendance Humanization",
+    data: { employee: "Hareesh", date: "2026-10-15", isPresent: true, punchIn: "09:05 AM", punchOut: "06:15 PM" },
+    expectedContains: "Hareesh was present on 2026-10-15"
+  },
+  {
+    name: "Employee Info Humanization",
+    data: { employee: "Hareesh", requestedField: "email", email: "hareesh@company.com" },
+    expectedContains: "email address of Hareesh is hareesh@company.com"
+  },
+  {
+    name: "Generic JSON Humanization",
+    data: { orderId: "ORD-1234", customer: "Alice", status: "Shipped" },
+    expectedContains: "Order id is ORD-1234"
+  }
+];
+
+let nlgPassed = 0;
+nlgTests.forEach((t, i) => {
+  const text = JsonHumanizer.humanize(t.data);
+  const ok = text.includes(t.expectedContains);
+  console.log(`[NLG Test ${i + 1}] [${ok ? "✓ PASS" : "✗ FAIL"}] ${t.name}`);
+  console.log(`  Output: "${text}"`);
+  if (ok) nlgPassed++;
+});
+
+console.log(`\n=== NLG SUMMARY: ${nlgPassed}/${nlgTests.length} Passed ===\n`);
+
+if (nlgPassed !== nlgTests.length) {
+  process.exit(1);
+}

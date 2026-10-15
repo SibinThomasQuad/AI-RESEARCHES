@@ -80,12 +80,70 @@ curl -X POST http://localhost:3000/api/parse \
 ---
 
 ### 3. `POST /api/execute`
-Parse the prompt, extract arguments, and execute the function implementation.
+Parse the prompt, extract arguments, execute the local implementation, and return both data and natural human text.
 
 ```bash
 curl -X POST http://localhost:3000/api/execute \
   -H "Content-Type: application/json" \
-  -d '{"prompt": "what is the payslip of hareesh in october"}'
+  -d '{"prompt": "what is the email id of hareesh"}'
+```
+
+---
+
+### 4. `POST /api/humanize` (JSON-to-Human-Text API)
+Convert any structured JSON response payload into natural, fluent human-readable sentences without external AI.
+
+#### Plain Text Output (`?format=text`):
+```bash
+curl -s -X POST "http://localhost:3000/api/humanize?format=text" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "success",
+    "employee": "Hareesh",
+    "month": "october",
+    "salaryBreakdown": {
+      "basicSalary": "$49,162",
+      "hra": "$19,664",
+      "pfDeduction": "$5,899",
+      "netSalary": "$62,927"
+    }
+  }'
+```
+**Output:**
+```text
+Here is the payslip for Hareesh for October. The basic salary is $49,162 with an HRA of $19,664 and PF deductions of $5,899 resulting in a net take-home salary of $62,927.
+```
+
+#### Employee Info Lookup Example:
+```bash
+curl -s -X POST "http://localhost:3000/api/humanize?format=text" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "employee": "Hareesh",
+    "requestedField": "email",
+    "email": "hareesh@company.com"
+  }'
+```
+**Output:**
+```text
+The email address of Hareesh is hareesh@company.com.
+```
+
+#### Arbitrary / Custom JSON Example:
+```bash
+curl -s -X POST "http://localhost:3000/api/humanize?format=text" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "orderId": "ORD-5432",
+    "customer": "Sarah",
+    "status": "Shipped",
+    "items": ["Ergonomic Keyboard", "Desk Lamp"],
+    "totalAmount": "$145.00"
+  }'
+```
+**Output:**
+```text
+Order id is ORD-5432. Customer is Sarah. Status is Shipped. Items: Ergonomic Keyboard and Desk Lamp. Total amount is $145.00.
 ```
 
 ---

@@ -2,6 +2,7 @@ const express = require("express");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
 const { FunctionCallerEngine } = require("./nlp/engine");
+const { JsonHumanizer } = require("./nlp/nlg");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -44,8 +45,25 @@ app.get("/", (req, res, next) => {
   const prompt = req.query.prompt || req.query.promt || req.query.q || req.query.query;
 
   if (prompt) {
-    const parseResult = engine.parse(prompt);
+    const trimmed = prompt.trim();
     const format = (req.query.format || "").toLowerCase();
+
+    // Auto-detect if user passed a raw JSON payload into ?promt=...
+    if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
+      try {
+        const parsedJson = JSON.parse(trimmed);
+        const humanText = JsonHumanizer.humanize(parsedJson, req.query.context);
+        if (format === "json") {
+          return res.json({ success: true, humanText, data: parsedJson });
+        }
+        res.setHeader("Content-Type", "text/plain; charset=utf-8");
+        return res.send(humanText);
+      } catch (e) {
+        // Continue to NLP parser if not valid JSON
+      }
+    }
+
+    const parseResult = engine.parse(prompt);
 
     if (format === "json") {
       return res.json(parseResult);
@@ -69,8 +87,25 @@ app.get("/api/call", (req, res) => {
     return res.status(400).json({ error: "Missing required query parameter 'prompt' or 'promt'" });
   }
 
-  const result = engine.parse(prompt);
+  const trimmed = prompt.trim();
   const format = (req.query.format || "").toLowerCase();
+
+  // Auto-detect if user passed a raw JSON payload
+  if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
+    try {
+      const parsedJson = JSON.parse(trimmed);
+      const humanText = JsonHumanizer.humanize(parsedJson, req.query.context);
+      if (format === "json") {
+        return res.json({ success: true, humanText, data: parsedJson });
+      }
+      res.setHeader("Content-Type", "text/plain; charset=utf-8");
+      return res.send(humanText);
+    } catch (e) {
+      // Continue to NLP parser if not valid JSON
+    }
+  }
+
+  const result = engine.parse(prompt);
 
   if (format === "json") {
     return res.json(result);
@@ -94,7 +129,7 @@ app.post("/api/parse", (req, res) => {
 });
 
 /**
- * POST /api/execute: Parse prompt and execute mock implementation
+ * POST /api/execute: Parse prompt, execute mock implementation, and return humanized text
  */
 app.post("/api/execute", async (req, res) => {
   const prompt = req.body.prompt || req.body.promt;
@@ -105,10 +140,44 @@ app.post("/api/execute", async (req, res) => {
   const result = engine.parse(prompt);
   if (result.success && result.execute) {
     const executionOutput = await result.execute();
-    return res.json({ ...result, executionOutput });
+    const humanText = JsonHumanizer.humanize(executionOutput, result.matchedFunction);
+    return res.json({ ...result, executionOutput, humanText });
   }
 
   return res.status(400).json(result);
+});
+
+/**
+ * POST /api/humanize: Convert any JSON response into fluent, human-readable text
+ */
+app.post("/api/humanize", (req, res) => {
+  try {
+    let payload = req.body;
+    let contextHint = req.query.context || req.query.hint || null;
+
+    // Support both wrapper { "data": {...}, "context": "..." } and raw JSON payload directly
+    if (payload && payload.data !== undefined) {
+      contextHint = payload.context || contextHint;
+      payload = payload.data;
+    }
+
+    const humanText = JsonHumanizer.humanize(payload, contextHint);
+    const format = (req.query.format || "").toLowerCase();
+    const acceptsText = (req.headers["accept"] || "").includes("text/plain");
+
+    if (format === "text" || format === "raw" || acceptsText) {
+      res.setHeader("Content-Type", "text/plain; charset=utf-8");
+      return res.send(humanText);
+    }
+
+    return res.json({
+      success: true,
+      humanText,
+      data: payload
+    });
+  } catch (err) {
+    return res.status(500).json({ error: "Failed to humanize JSON: " + err.message });
+  }
 });
 
 /**
