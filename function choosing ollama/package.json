@@ -1,0 +1,18 @@
+{
+  "name": "function-choosing-ollama",
+  "version": "1.0.0",
+  "description": "Lightweight Node.js function selector using Ollama and local LLMs",
+  "main": "function_selector.js",
+  "scripts": {
+    "start": "node function_selector.js",
+    "test": "node function_selector.js"
+  },
+  "keywords": [
+    "ollama",
+    "function-calling",
+    "intent-classification",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "MIT"
+}
